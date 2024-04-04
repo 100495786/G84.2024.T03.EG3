@@ -1,6 +1,8 @@
 """Hotel reservation class"""
 import hashlib
 from datetime import datetime
+import re
+from uc3m_travel.hotel_management_exception import HotelManagementException
 
 class HotelReservation:
     """Class for representing hotel reservations"""
@@ -14,7 +16,7 @@ class HotelReservation:
                  arrival:str,
                  num_days:int):
         """constructor of reservation objects"""
-        self.__credit_card_number = credit_card_number
+        self.__credit_card_number = self.validatecreditcard(credit_card_number)
         self.__id_card = id_card
         justnow = datetime.utcnow()
         self.__arrival = arrival
@@ -59,3 +61,30 @@ class HotelReservation:
     def localizer(self):
         """Returns the md5 signature"""
         return self.__localizer
+
+    def validatecreditcard(self, credit_card):
+        """validates the credit card number using luhn altorithm"""
+        # taken form
+        # https://allwin-raju-12.medium.com/
+        # credit-card-number-validation-using-luhns-algorithm-in-python-c0ed2fac6234
+        # PLEASE INCLUDE HERE THE CODE FOR VALIDATING THE GUID
+        # RETURN TRUE IF THE GUID IS RIGHT, OR FALSE IN OTHER CASE
+
+        myregex = re.compile(r"^[0-9]{16}")
+        res = myregex.fullmatch(credit_card)
+        if not res:
+            raise HotelManagementException("Invalid credit card format")
+
+        def digits_of(n):
+            return [int(d) for d in str(n)]
+
+        digits = digits_of(credit_card)
+        odd_digits = digits[-1::-2]
+        even_digits = digits[-2::-2]
+        checksum = 0
+        checksum += sum(odd_digits)
+        for d in even_digits:
+            checksum += sum(digits_of(d * 2))
+        if not checksum % 10 == 0:
+            raise HotelManagementException("Invalid credit card number (not luhn)")
+        return credit_card
