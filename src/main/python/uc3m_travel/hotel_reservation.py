@@ -22,7 +22,7 @@ class HotelReservation:
         self.__arrival = self.validate_arrival_date(arrival)
         self.__reservation_date = datetime.timestamp(justnow)
         self.__name_surname = name_surname
-        self.__phone_number = phone_number
+        self.__phone_number = self.validate_phonenumber(phone_number)
         self.__room_type = self.validate_room_type(room_type)
         self.__num_days = num_days
         self.__localizer =  hashlib.md5(str(self).encode()).hexdigest()
@@ -102,3 +102,10 @@ class HotelReservation:
         if not res:
             raise HotelManagementException("Invalid date format")
         return arrival_date
+    def validate_phonenumber(self, phone_number):
+        """validates the phone number format  using regex"""
+        myregex = re.compile(r"^(\+)[0-9]{9}")
+        res = myregex.fullmatch(phone_number)
+        if not res:
+            raise HotelManagementException("Invalid phone number format")
+        return phone_number
