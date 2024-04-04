@@ -19,7 +19,7 @@ class HotelReservation:
         self.__credit_card_number = self.validatecreditcard(credit_card_number)
         self.__id_card = id_card
         justnow = datetime.utcnow()
-        self.__arrival = arrival
+        self.__arrival = self.validate_arrival_date(arrival)
         self.__reservation_date = datetime.timestamp(justnow)
         self.__name_surname = name_surname
         self.__phone_number = phone_number
@@ -95,3 +95,10 @@ class HotelReservation:
         if not res:
             raise HotelManagementException("Invalid roomtype value")
         return room_type
+    def validate_arrival_date(self, arrival_date):
+        """validates the arrival date format  using regex"""
+        myregex = re.compile(r"^(([0-2]\d|-3[0-1])\/(0\d|1[0-2])\/\d\d\d\d)$")
+        res = myregex.fullmatch(arrival_date)
+        if not res:
+            raise HotelManagementException("Invalid date format")
+        return arrival_date
