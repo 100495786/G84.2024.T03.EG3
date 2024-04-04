@@ -13,14 +13,6 @@ class HotelManager:
     """Class with all the methods for managing reservations and stays"""
     def __init__(self):
         pass
-    def validate_room_type(self, room_type):
-        """validates the room type value using regex"""
-        myregex = re.compile(r"(SINGLE|DOUBLE|SUITE)")
-        res = myregex.fullmatch(room_type)
-        if not res:
-            raise HotelManagementException("Invalid roomtype value")
-        return room_type
-
     def validate_arrival_date(self, arrival_date):
         """validates the arrival date format  using regex"""
         myregex = re.compile(r"^(([0-2]\d|-3[0-1])\/(0\d|1[0-2])\/\d\d\d\d)$")
@@ -118,8 +110,6 @@ class HotelManager:
             raise HotelManagementException("Invalid IdCard format")
         if not self.validate_dni(id_card):
             raise HotelManagementException("Invalid IdCard letter")
-
-        room_type = self.validate_room_type(room_type)
 
         self.validate_name_surname(name_surname)
         arrival_date = self.validate_arrival_date(arrival_date)
