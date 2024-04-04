@@ -14,7 +14,7 @@ class HotelManager:
     def __init__(self):
         pass
 
-    def validatecreditcard( self, x ):
+    def validatecreditcard(self, credit_card):
         """validates the credit card number using luhn altorithm"""
         #taken form
         # https://allwin-raju-12.medium.com/
@@ -23,14 +23,14 @@ class HotelManager:
         # RETURN TRUE IF THE GUID IS RIGHT, OR FALSE IN OTHER CASE
 
         myregex = re.compile(r"^[0-9]{16}")
-        res = myregex.fullmatch(x)
+        res = myregex.fullmatch(credit_card)
         if not res:
             raise HotelManagementException("Invalid credit card format")
         def digits_of(n):
             return [int(d) for d in str(n)]
 
 
-        digits = digits_of(x)
+        digits = digits_of(credit_card)
         odd_digits = digits[-1::-2]
         even_digits = digits[-2::-2]
         checksum = 0
@@ -39,7 +39,7 @@ class HotelManager:
             checksum += sum(digits_of(d * 2))
         if not checksum % 10 == 0:
             raise HotelManagementException("Invalid credit card number (not luhn)")
-        return x
+        return credit_card
 
     def validate_room_type(self, room_type):
         """validates the room type value using regex"""
