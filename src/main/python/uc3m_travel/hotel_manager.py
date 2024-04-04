@@ -13,34 +13,6 @@ class HotelManager:
     """Class with all the methods for managing reservations and stays"""
     def __init__(self):
         pass
-
-    def validatecreditcard(self, credit_card):
-        """validates the credit card number using luhn altorithm"""
-        #taken form
-        # https://allwin-raju-12.medium.com/
-        # credit-card-number-validation-using-luhns-algorithm-in-python-c0ed2fac6234
-        # PLEASE INCLUDE HERE THE CODE FOR VALIDATING THE GUID
-        # RETURN TRUE IF THE GUID IS RIGHT, OR FALSE IN OTHER CASE
-
-        myregex = re.compile(r"^[0-9]{16}")
-        res = myregex.fullmatch(credit_card)
-        if not res:
-            raise HotelManagementException("Invalid credit card format")
-        def digits_of(n):
-            return [int(d) for d in str(n)]
-
-
-        digits = digits_of(credit_card)
-        odd_digits = digits[-1::-2]
-        even_digits = digits[-2::-2]
-        checksum = 0
-        checksum += sum(odd_digits)
-        for d in even_digits:
-            checksum += sum(digits_of(d * 2))
-        if not checksum % 10 == 0:
-            raise HotelManagementException("Invalid credit card number (not luhn)")
-        return credit_card
-
     def validate_room_type(self, room_type):
         """validates the room type value using regex"""
         myregex = re.compile(r"(SINGLE|DOUBLE|SUITE)")
@@ -150,7 +122,6 @@ class HotelManager:
         room_type = self.validate_room_type(room_type)
 
         self.validate_name_surname(name_surname)
-        credit_card = self.validatecreditcard(credit_card)
         arrival_date = self.validate_arrival_date(arrival_date)
         num_days = self.validate_numdays(num_days)
         phone_number = self.validate_phonenumber(phone_number)
