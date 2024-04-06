@@ -24,7 +24,7 @@ class HotelReservation:
         self.__name_surname = name_surname
         self.__phone_number = self.validate_phonenumber(phone_number)
         self.__room_type = self.validate_room_type(room_type)
-        self.__num_days = num_days
+        self.__num_days = self.validate_numdays(num_days)
         self.__localizer =  hashlib.md5(str(self).encode()).hexdigest()
 
     def __str__(self):
@@ -109,3 +109,12 @@ class HotelReservation:
         if not res:
             raise HotelManagementException("Invalid phone number format")
         return phone_number
+    def validate_numdays(self,num_days):
+        """validates the number of days"""
+        try:
+            days = int(num_days)
+        except ValueError as ex:
+            raise HotelManagementException("Invalid num_days datatype") from ex
+        if (days < 1 or days > 10):
+            raise HotelManagementException("Numdays should be in the range 1-10")
+        return num_days
