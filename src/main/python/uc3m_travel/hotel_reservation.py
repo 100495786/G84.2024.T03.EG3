@@ -119,8 +119,8 @@ class HotelReservation:
             raise HotelManagementException("Numdays should be in the range 1-10")
         return num_days
     def validate_name_surname(self, name_surname):
-        r = r"^(?=^.{10,50}$)([a-zA-Z]+(\s[a-zA-Z]+)+)$"
-        myregex = re.compile(r)
+        expresionRegular = r"^(?=^.{10,50}$)([a-zA-Z]+(\s[a-zA-Z]+)+)$"
+        myregex = re.compile(expresionRegular)
         regex_matches = myregex.fullmatch(name_surname)
         if not regex_matches:
             raise HotelManagementException("Invalid name format")
