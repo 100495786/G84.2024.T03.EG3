@@ -105,8 +105,8 @@ class HotelReservation:
     def validate_phonenumber(self, phone_number):
         """validates the phone number format  using regex"""
         myregex = re.compile(r"^(\+)[0-9]{9}")
-        res = myregex.fullmatch(phone_number)
-        if not res:
+        resultado = myregex.fullmatch(phone_number)
+        if not resultado:
             raise HotelManagementException("Invalid phone number format")
         return phone_number
     def validate_numdays(self,num_days):
