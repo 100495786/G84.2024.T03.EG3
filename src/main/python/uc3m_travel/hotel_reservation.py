@@ -17,7 +17,7 @@ class HotelReservation:
                  num_days:int):
         """constructor of reservation objects"""
         self.__credit_card_number = self.validatecreditcard(credit_card_number)
-        self.__id_card = id_card
+        self.__id_card = self.validate_idcard(id_card)
         justnow = datetime.utcnow()
         self.__arrival = self.validate_arrival_date(arrival)
         self.__reservation_date = datetime.timestamp(justnow)
@@ -125,3 +125,21 @@ class HotelReservation:
         if not regex_matches:
             raise HotelManagementException("Invalid name format")
         return name_surname
+    def validate_idcard(self, id_card):
+        r = r'^[0-9]{8}[A-Z]{1}$'
+        my_regex = re.compile(r)
+        if not my_regex.fullmatch(id_card):
+            raise HotelManagementException("Invalid IdCard format")
+        if not self.validate_dni(id_card):
+            raise HotelManagementException("Invalid IdCard letter")
+        return id_card
+    @staticmethod#Método que no tiene self
+    def validate_dni( d ):
+        """RETURN TRUE IF THE DNI IS RIGHT, OR FALSE IN OTHER CASE"""
+        c = {"0": "T", "1": "R", "2": "W", "3": "A", "4": "G", "5": "M",
+             "6": "Y", "7": "F", "8": "P", "9": "D", "10": "X", "11": "B",
+             "12": "N", "13": "J", "14": "Z", "15": "S", "16": "Q", "17": "V",
+             "18": "H", "19": "L", "20": "C", "21": "K", "22": "E"}
+        v = int(d[ 0:8 ])
+        r = str(v % 23)
+        return d[8] == c[r]
