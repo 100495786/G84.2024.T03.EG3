@@ -134,12 +134,12 @@ class HotelReservation:
             raise HotelManagementException("Invalid IdCard letter")
         return id_card
     @staticmethod#Método que no tiene self
-    def validate_dni( d ):
+    def validate_dni( dni ):
         """RETURN TRUE IF THE DNI IS RIGHT, OR FALSE IN OTHER CASE"""
-        c = {"0": "T", "1": "R", "2": "W", "3": "A", "4": "G", "5": "M",
+        diccionarioLetras = {"0": "T", "1": "R", "2": "W", "3": "A", "4": "G", "5": "M",
              "6": "Y", "7": "F", "8": "P", "9": "D", "10": "X", "11": "B",
              "12": "N", "13": "J", "14": "Z", "15": "S", "16": "Q", "17": "V",
              "18": "H", "19": "L", "20": "C", "21": "K", "22": "E"}
-        v = int(d[ 0:8 ])
-        r = str(v % 23)
-        return d[8] == c[r]
+        numeros = int(dni[ 0:8 ])
+        resto = str(numeros % 23)
+        return dni[8] == diccionarioLetras[resto]
