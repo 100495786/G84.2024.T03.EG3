@@ -126,8 +126,8 @@ class HotelReservation:
             raise HotelManagementException("Invalid name format")
         return name_surname
     def validate_idcard(self, id_card):
-        r = r'^[0-9]{8}[A-Z]{1}$'
-        my_regex = re.compile(r)
+        expresionRegular = r'^[0-9]{8}[A-Z]{1}$'
+        my_regex = re.compile(expresionRegular)
         if not my_regex.fullmatch(id_card):
             raise HotelManagementException("Invalid IdCard format")
         if not self.validate_dni(id_card):
