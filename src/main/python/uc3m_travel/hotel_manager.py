@@ -85,7 +85,6 @@ class HotelManager:
         if not self.validate_dni(id_card):
             raise HotelManagementException("Invalid IdCard letter")
 
-        self.validate_name_surname(name_surname)
         my_reservation = HotelReservation(id_card=id_card,
                                           credit_card_number=credit_card,
                                           name_surname=name_surname,
@@ -123,13 +122,6 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return my_reservation.localizer
-
-    def validate_name_surname(self, name_surname):
-        r = r"^(?=^.{10,50}$)([a-zA-Z]+(\s[a-zA-Z]+)+)$"
-        myregex = re.compile(r)
-        regex_matches = myregex.fullmatch(name_surname)
-        if not regex_matches:
-            raise HotelManagementException("Invalid name format")
 
     def guest_arrival(self, file_input:str)->str:
         """manages the arrival of a guest with a reservation"""

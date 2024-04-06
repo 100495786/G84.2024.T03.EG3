@@ -21,11 +21,11 @@ class HotelReservation:
         justnow = datetime.utcnow()
         self.__arrival = self.validate_arrival_date(arrival)
         self.__reservation_date = datetime.timestamp(justnow)
-        self.__name_surname = name_surname
+        self.__name_surname = self.validate_name_surname(name_surname)
         self.__phone_number = self.validate_phonenumber(phone_number)
         self.__room_type = self.validate_room_type(room_type)
         self.__num_days = self.validate_numdays(num_days)
-        self.__localizer =  hashlib.md5(str(self).encode()).hexdigest()
+        self.__localizer = hashlib.md5(str(self).encode()).hexdigest()
 
     def __str__(self):
         """return a json string with the elements required to calculate the localizer"""
@@ -118,3 +118,10 @@ class HotelReservation:
         if (days < 1 or days > 10):
             raise HotelManagementException("Numdays should be in the range 1-10")
         return num_days
+    def validate_name_surname(self, name_surname):
+        r = r"^(?=^.{10,50}$)([a-zA-Z]+(\s[a-zA-Z]+)+)$"
+        myregex = re.compile(r)
+        regex_matches = myregex.fullmatch(name_surname)
+        if not regex_matches:
+            raise HotelManagementException("Invalid name format")
+        return name_surname
