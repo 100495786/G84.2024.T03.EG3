@@ -2,6 +2,7 @@
 import hashlib
 from datetime import datetime
 import re
+from uc3m_travel.attribute.attribute_name_surname import NameSurname
 from uc3m_travel.hotel_management_exception import HotelManagementException
 
 class HotelReservation:
@@ -21,7 +22,7 @@ class HotelReservation:
         justnow = datetime.utcnow()
         self.__arrival = self.validate_arrival_date(arrival)
         self.__reservation_date = datetime.timestamp(justnow)
-        self.__name_surname = self.validate_name_surname(name_surname)
+        self.__name_surname = NameSurname(name_surname).value
         self.__phone_number = self.validate_phonenumber(phone_number)
         self.__room_type = self.validate_room_type(room_type)
         self.__num_days = self.validate_numdays(num_days)
@@ -118,13 +119,7 @@ class HotelReservation:
         if (days < 1 or days > 10):
             raise HotelManagementException("Numdays should be in the range 1-10")
         return num_days
-    def validate_name_surname(self, name_surname):
-        expresionRegular = r"^(?=^.{10,50}$)([a-zA-Z]+(\s[a-zA-Z]+)+)$"
-        myregex = re.compile(expresionRegular)
-        regex_matches = myregex.fullmatch(name_surname)
-        if not regex_matches:
-            raise HotelManagementException("Invalid name format")
-        return name_surname
+
     def validate_idcard(self, id_card):
         expresionRegular = r'^[0-9]{8}[A-Z]{1}$'
         my_regex = re.compile(expresionRegular)
