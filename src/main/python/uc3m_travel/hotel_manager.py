@@ -90,31 +90,44 @@ class HotelManager:
         file_store = JSON_FILES_PATH + "store_reservation.json"
 
         #leo los datos del fichero si existe , y si no existe creo una lista vacia
-        try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
-                data_list = json.load(file)
-        except FileNotFoundError:
-            data_list = []
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException ("JSON Decode Error - Wrong JSON Format") from ex
+        data_list = self.load_json_store(file_store)
 
         #compruebo que esta reserva no esta en la lista
-        for item in data_list:
-            if my_reservation.localizer == item["_HotelReservation__localizer"]:
-                raise HotelManagementException ("Reservation already exists")
-            if my_reservation.id_card == item["_HotelReservation__id_card"]:
-                raise HotelManagementException("This ID card has another reservation")
+        self.find_item_in_store(data_list, my_reservation)
         #añado los datos de mi reserva a la lista , a lo que hubiera
-        data_list.append(my_reservation.__dict__)
+        self.add_item_in_store(data_list, my_reservation)
 
         #escribo la lista en el fichero
+        self.save_store(data_list, file_store)
+
+        return my_reservation.localizer
+
+    def save_store(self, data_list, file_store):
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
         except FileNotFoundError as ex:
             raise HotelManagementException("Wrong file  or file path") from ex
 
-        return my_reservation.localizer
+    def add_item_in_store(self, data_list, my_reservation):
+        data_list.append(my_reservation.__dict__)
+
+    def find_item_in_store(self, data_list, my_reservation):
+        for item in data_list:
+            if my_reservation.localizer == item["_HotelReservation__localizer"]:
+                raise HotelManagementException("Reservation already exists")
+            if my_reservation.id_card == item["_HotelReservation__id_card"]:
+                raise HotelManagementException("This ID card has another reservation")
+
+    def load_json_store(self, file_store):
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                data_list = json.load(file)
+        except FileNotFoundError:
+            data_list = []
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return data_list
 
     def validate_idcard(self, id_card):
         r = r'^[0-9]{8}[A-Z]{1}$'
