@@ -78,22 +78,3 @@ class HotelReservation:
         if (days < 1 or days > 10):
             raise HotelManagementException("Numdays should be in the range 1-10")
         return num_days
-
-    def validate_idcard(self, id_card):
-        expresionRegular = r'^[0-9]{8}[A-Z]{1}$'
-        my_regex = re.compile(expresionRegular)
-        if not my_regex.fullmatch(id_card):
-            raise HotelManagementException("Invalid IdCard format")
-        if not self.validate_dni(id_card):
-            raise HotelManagementException("Invalid IdCard letter")
-        return id_card
-    @staticmethod#Método que no tiene self
-    def validate_dni( dni ):
-        """RETURN TRUE IF THE DNI IS RIGHT, OR FALSE IN OTHER CASE"""
-        diccionarioLetras = {"0": "T", "1": "R", "2": "W", "3": "A", "4": "G", "5": "M",
-             "6": "Y", "7": "F", "8": "P", "9": "D", "10": "X", "11": "B",
-             "12": "N", "13": "J", "14": "Z", "15": "S", "16": "Q", "17": "V",
-             "18": "H", "19": "L", "20": "C", "21": "K", "22": "E"}
-        numeros = int(dni[ 0:8 ])
-        resto = str(numeros % 23)
-        return dni[8] == diccionarioLetras[resto]
