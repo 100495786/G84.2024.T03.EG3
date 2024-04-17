@@ -7,6 +7,7 @@ from uc3m_travel.hotel_reservation import HotelReservation
 from uc3m_travel.hotel_stay import HotelStay
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from freezegun import freeze_time
+from uc3m_travel.storage.reservation_json_store import ReservationJsonStore
 
 
 class HotelManager:
@@ -88,17 +89,18 @@ class HotelManager:
 
         # escribo el fichero Json con todos los datos
         file_store = JSON_FILES_PATH + "store_reservation.json"
+        reserva = ReservationJsonStore()
 
         #leo los datos del fichero si existe , y si no existe creo una lista vacia
-        data_list = self.load_json_store(file_store)
+        data_list = reserva.load_json_store(file_store)
 
         #compruebo que esta reserva no esta en la lista
-        self.find_item_in_store(data_list, my_reservation)
+        reserva.find_item_in_store(data_list, my_reservation)
         #añado los datos de mi reserva a la lista , a lo que hubiera
-        self.add_item_in_store(data_list, my_reservation)
+        reserva.add_item_in_store(data_list, my_reservation)
 
         #escribo la lista en el fichero
-        self.save_store(data_list, file_store)
+        reserva.save_store(data_list, file_store)
 
         return my_reservation.localizer
 
