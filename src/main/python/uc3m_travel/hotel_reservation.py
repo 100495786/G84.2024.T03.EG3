@@ -5,6 +5,7 @@ import re
 from uc3m_travel.attribute.attribute_name_surname import NameSurname
 from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_phone_number import PhoneNumber
+from uc3m_travel.attribute.attribute_arrival import Arrival
 from uc3m_travel.hotel_management_exception import HotelManagementException
 
 class HotelReservation:
@@ -22,7 +23,7 @@ class HotelReservation:
         self.__credit_card_number = self.validatecreditcard(credit_card_number)
         self.__id_card = IdCard(id_card).value
         justnow = datetime.utcnow()
-        self.__arrival = self.validate_arrival_date(arrival)
+        self.__arrival = Arrival(arrival).value
         self.__reservation_date = datetime.timestamp(justnow)
         self.__name_surname = NameSurname(name_surname).value
         self.__phone_number = PhoneNumber(phone_number).value
