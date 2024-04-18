@@ -9,6 +9,7 @@ from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from freezegun import freeze_time
 from uc3m_travel.storage.store_reservation import StoreReservation
 from uc3m_travel.attribute.attribute_id_card import IdCard
+from uc3m_travel.attribute.attribute_credit_card import CreditCard
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
@@ -52,7 +53,7 @@ class HotelManager:
                                    arrival="20/01/2024")
         except KeyError as e:
             raise HotelManagementException("JSON Decode Error - Invalid JSON Key") from e
-        if not self.validatecreditcard(c):
+        if not CreditCard(c).value:
             raise HotelManagementException("Invalid credit card number")
         # Close the file
         return req
