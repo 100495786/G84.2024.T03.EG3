@@ -8,6 +8,7 @@ from uc3m_travel.attribute.attribute_phone_number import PhoneNumber
 from uc3m_travel.attribute.attribute_arrival import Arrival
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_room_type import RoomType
+from uc3m_travel.attribute.attribute_num_days import NumDays
 from uc3m_travel.hotel_management_exception import HotelManagementException
 
 class HotelReservation:
@@ -30,7 +31,7 @@ class HotelReservation:
         self.__name_surname = NameSurname(name_surname).value
         self.__phone_number = PhoneNumber(phone_number).value
         self.__room_type = RoomType(room_type).value
-        self.__num_days = self.validate_numdays(num_days)
+        self.__num_days = NumDays(num_days).value
         self.__localizer = hashlib.md5(str(self).encode()).hexdigest()
 
     def __str__(self):
@@ -67,14 +68,3 @@ class HotelReservation:
     def localizer(self):
         """Returns the md5 signature"""
         return self.__localizer
-
-
-    def validate_numdays(self,num_days):
-        """validates the number of days"""
-        try:
-            days = int(num_days)
-        except ValueError as ex:
-            raise HotelManagementException("Invalid num_days datatype") from ex
-        if (days < 1 or days > 10):
-            raise HotelManagementException("Numdays should be in the range 1-10")
-        return num_days
