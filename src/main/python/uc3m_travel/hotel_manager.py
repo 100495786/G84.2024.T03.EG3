@@ -166,13 +166,7 @@ class HotelManager:
 
         #leo los datos del fichero , si no existe deber dar error porque el almacen de reservaa
         # debe existir para hacer el checkin
-        try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
-                store_list = json.load(file)
-        except FileNotFoundError as ex:
-            raise HotelManagementException ("Error: store reservation not found") from ex
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException ("JSON Decode Error - Wrong JSON Format") from ex
+        store_list = self.read_store(file_store)
         # compruebo si esa reserva esta en el almacen
         found = False
         for item in store_list:
@@ -229,9 +223,7 @@ class HotelManager:
             raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
 
         # comprobar que no he hecho otro ckeckin antes
-        for item in room_key_list:
-            if my_checkin.room_key == item["_HotelStay__room_key"]:
-                raise HotelManagementException ("ckeckin  ya realizado")
+        self.find_checkin(my_checkin, room_key_list)
 
         #añado los datos de mi reserva a la lista , a lo que hubiera
         room_key_list.append(my_checkin.__dict__)
@@ -243,6 +235,21 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return my_checkin.room_key
+
+    def find_checkin(self, my_checkin, room_key_list):
+        for item in room_key_list:
+            if my_checkin.room_key == item["_HotelStay__room_key"]:
+                raise HotelManagementException("ckeckin  ya realizado")
+
+    def read_store(self, file_store):
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                store_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: store reservation not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return store_list
 
     def guest_checkout(self, room_key:str)->bool:
         """manages the checkout of a guest"""
