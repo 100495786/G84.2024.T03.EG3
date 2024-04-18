@@ -11,19 +11,12 @@ from uc3m_travel.storage.store_reservation import StoreReservation
 from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_localizer import Localizer
+from uc3m_travel.attribute.attribute_roomkey import RoomKey
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
     def __init__(self):
         pass
-    def validate_roomkey(self, l):
-        """validates the roomkey format using a regex"""
-        r = r'^[a-fA-F0-9]{64}$'
-        myregex = re.compile(r)
-        if not myregex.fullmatch(l):
-            raise HotelManagementException("Invalid room key format")
-        return l
-
     def read_data_from_json(self, fi):
         """reads the content of a json file with two fields: CreditCard and phoneNumber"""
         try:
@@ -197,7 +190,7 @@ class HotelManager:
 
     def guest_checkout(self, room_key:str)->bool:
         """manages the checkout of a guest"""
-        self.validate_roomkey(room_key)
+        RoomKey(room_key).value
         #check thawt the roomkey is stored in the checkins file
         file_store = JSON_FILES_PATH + "store_check_in.json"
         try:
