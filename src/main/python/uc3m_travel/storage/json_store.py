@@ -1,13 +1,12 @@
 from uc3m_travel.hotel_management_exception import HotelManagementException
 import json
-class JsonStore():
-    _data_list = []
-    _file_name = ""
+class JsonStore:
     def __init__(self):
-        pass
-    def load_json_store(self, file_store):
+        self._file_name=""
+
+    def load_json_store(self):
         try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
+            with open(self._file_name, "r", encoding="utf-8", newline="") as file:
                 data_list = json.load(file)
         except FileNotFoundError:
             data_list = []
@@ -15,9 +14,9 @@ class JsonStore():
             raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
         return data_list
 
-    def save_store(self, data_list, file_store):
+    def save_store(self, data_list):
         try:
-            with open(file_store, "w", encoding="utf-8", newline="") as file:
+            with open(self._file_name, "w", encoding="utf-8", newline="") as file:
                 json.dump(data_list, file, indent=2)
         except FileNotFoundError as ex:
             raise HotelManagementException("Wrong file  or file path") from ex
@@ -31,5 +30,3 @@ class JsonStore():
                 raise HotelManagementException("Reservation already exists")
             if my_reservation.id_card == item["_HotelReservation__id_card"]:
                 raise HotelManagementException("This ID card has another reservation")
-
-    #Falta el read store
