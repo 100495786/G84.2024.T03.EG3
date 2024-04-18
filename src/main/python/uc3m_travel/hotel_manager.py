@@ -16,15 +16,6 @@ class HotelManager:
     """Class with all the methods for managing reservations and stays"""
     def __init__(self):
         pass
-
-    def validate_localizer(self, l):
-        """validates the localizer format using a regex"""
-        r = r'^[a-fA-F0-9]{32}$'
-        myregex = re.compile(r)
-        if not myregex.fullmatch(l):
-            raise HotelManagementException("Invalid localizer")
-        return l
-
     def validate_roomkey(self, l):
         """validates the roomkey format using a regex"""
         r = r'^[a-fA-F0-9]{64}$'
