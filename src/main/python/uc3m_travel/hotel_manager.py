@@ -7,7 +7,7 @@ from uc3m_travel.hotel_reservation import HotelReservation
 from uc3m_travel.hotel_stay import HotelStay
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from freezegun import freeze_time
-from uc3m_travel.storage.reservation_json_store import ReservationJsonStore
+from uc3m_travel.storage.json_store import JsonStore
 
 
 class HotelManager:
@@ -89,7 +89,7 @@ class HotelManager:
 
         # escribo el fichero Json con todos los datos
         file_store = JSON_FILES_PATH + "store_reservation.json"
-        reserva = ReservationJsonStore()
+        reserva = JsonStore()
 
         #leo los datos del fichero si existe , y si no existe creo una lista vacia
         data_list = reserva.load_json_store(file_store)
@@ -103,33 +103,6 @@ class HotelManager:
         reserva.save_store(data_list, file_store)
 
         return my_reservation.localizer
-
-    def save_store(self, data_list, file_store):
-        try:
-            with open(file_store, "w", encoding="utf-8", newline="") as file:
-                json.dump(data_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise HotelManagementException("Wrong file  or file path") from ex
-
-    def add_item_in_store(self, data_list, my_reservation):
-        data_list.append(my_reservation.__dict__)
-
-    def find_item_in_store(self, data_list, my_reservation):
-        for item in data_list:
-            if my_reservation.localizer == item["_HotelReservation__localizer"]:
-                raise HotelManagementException("Reservation already exists")
-            if my_reservation.id_card == item["_HotelReservation__id_card"]:
-                raise HotelManagementException("This ID card has another reservation")
-
-    def load_json_store(self, file_store):
-        try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
-                data_list = json.load(file)
-        except FileNotFoundError:
-            data_list = []
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
-        return data_list
 
     def validate_idcard(self, id_card):
         r = r'^[0-9]{8}[A-Z]{1}$'
