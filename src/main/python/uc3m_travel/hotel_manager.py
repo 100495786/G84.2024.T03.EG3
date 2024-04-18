@@ -95,12 +95,12 @@ class HotelManager:
         data_list = reserva.load_json_store()
 
         #compruebo que esta reserva no esta en la lista
-        reserva.find_item_in_store(data_list, my_reservation)
+        reserva.find_item_in_store(my_reservation)
         #añado los datos de mi reserva a la lista , a lo que hubiera
-        reserva.add_item_in_store(data_list, my_reservation)
+        reserva.add_item_in_store(my_reservation)
 
         #escribo la lista en el fichero
-        reserva.save_store(data_list)
+        reserva.save_store()
 
         return my_reservation.localizer
 
