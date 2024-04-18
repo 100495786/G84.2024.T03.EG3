@@ -1,7 +1,6 @@
 """Hotel reservation class"""
 import hashlib
 from datetime import datetime
-import re
 from uc3m_travel.attribute.attribute_name_surname import NameSurname
 from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_phone_number import PhoneNumber
@@ -9,7 +8,6 @@ from uc3m_travel.attribute.attribute_arrival import Arrival
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_room_type import RoomType
 from uc3m_travel.attribute.attribute_num_days import NumDays
-from uc3m_travel.hotel_management_exception import HotelManagementException
 
 class HotelReservation:
     """Class for representing hotel reservations"""
@@ -33,7 +31,6 @@ class HotelReservation:
         self.__room_type = RoomType(room_type).value
         self.__num_days = NumDays(num_days).value
         self.__localizer = hashlib.md5(str(self).encode()).hexdigest()
-
     def __str__(self):
         """return a json string with the elements required to calculate the localizer"""
         #VERY IMPORTANT: JSON KEYS CANNOT BE RENAMED
@@ -54,7 +51,6 @@ class HotelReservation:
     @credit_card.setter
     def credit_card(self, value):
         self.__credit_card_number = value
-
     @property
     def id_card(self):
         """property for getting and setting the id_card"""
@@ -62,8 +58,6 @@ class HotelReservation:
     @id_card.setter
     def id_card(self, value):
         self.__id_card = value
-
-
     @property
     def localizer(self):
         """Returns the md5 signature"""

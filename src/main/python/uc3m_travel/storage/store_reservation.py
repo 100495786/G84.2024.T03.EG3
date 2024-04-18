@@ -4,4 +4,3 @@ class StoreReservation(JsonStore):
     def __init__(self):
         self._file_name= JSON_FILES_PATH + "store_reservation.json"
         self._data_list =[]
-

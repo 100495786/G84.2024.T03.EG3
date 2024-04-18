@@ -4,6 +4,8 @@ class JsonStore:
     def __init__(self):
         self._file_name=""
         self._data_list=""
+        self._error_message_find = ""
+        self._error_message_not_found= ""
 
     def load_json_store(self):
         try:

@@ -8,23 +8,12 @@ from uc3m_travel.hotel_stay import HotelStay
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from freezegun import freeze_time
 from uc3m_travel.storage.store_reservation import StoreReservation
-
+from uc3m_travel.attribute.attribute_id_card import IdCard
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
     def __init__(self):
         pass
-    @staticmethod#Método que no tiene self
-    def validate_dni( d ):
-        """RETURN TRUE IF THE DNI IS RIGHT, OR FALSE IN OTHER CASE"""
-        c = {"0": "T", "1": "R", "2": "W", "3": "A", "4": "G", "5": "M",
-             "6": "Y", "7": "F", "8": "P", "9": "D", "10": "X", "11": "B",
-             "12": "N", "13": "J", "14": "Z", "15": "S", "16": "Q", "17": "V",
-             "18": "H", "19": "L", "20": "C", "21": "K", "22": "E"}
-        v = int(d[ 0:8 ])
-        r = str(v % 23)
-        return d[8] == c[r]
-
 
     def validate_localizer(self, l):
         """validates the localizer format using a regex"""
@@ -88,29 +77,17 @@ class HotelManager:
                                           num_days=num_days)
 
         # escribo el fichero Json con todos los datos
-        file_store = JSON_FILES_PATH + "store_reservation.json"
         reserva = StoreReservation()
-
         #leo los datos del fichero si existe , y si no existe creo una lista vacia
-        data_list = reserva.load_json_store()
-
+        reserva.load_json_store()
         #compruebo que esta reserva no esta en la lista
         reserva.find_item_in_store(my_reservation)
         #añado los datos de mi reserva a la lista , a lo que hubiera
         reserva.add_item_in_store(my_reservation)
-
         #escribo la lista en el fichero
         reserva.save_store()
 
         return my_reservation.localizer
-
-    def validate_idcard(self, id_card):
-        r = r'^[0-9]{8}[A-Z]{1}$'
-        my_regex = re.compile(r)
-        if not my_regex.fullmatch(id_card):
-            raise HotelManagementException("Invalid IdCard format")
-        if not self.validate_dni(id_card):
-            raise HotelManagementException("Invalid IdCard letter")
 
     def guest_arrival(self, file_input:str)->str:
         """manages the arrival of a guest with a reservation"""
@@ -129,7 +106,7 @@ class HotelManager:
         except KeyError as e:
             raise HotelManagementException("Error - Invalid Key in JSON") from e
 
-        self.validate_idcard(my_id_card)
+        IdCard(my_id_card).value
 
         self.validate_localizer(my_localizer)
         # self.validate_localizer() hay que validar
