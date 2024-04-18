@@ -10,6 +10,7 @@ from freezegun import freeze_time
 from uc3m_travel.storage.store_reservation import StoreReservation
 from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
+from uc3m_travel.attribute.attribute_localizer import Localizer
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
@@ -107,10 +108,11 @@ class HotelManager:
         except KeyError as e:
             raise HotelManagementException("Error - Invalid Key in JSON") from e
 
+        #Validamos IdCard
         IdCard(my_id_card).value
 
-        self.validate_localizer(my_localizer)
-        # self.validate_localizer() hay que validar
+        #Validamos Localizer
+        Localizer(my_localizer).value
 
         #buscar en almacen
         file_store = JSON_FILES_PATH + "store_reservation.json"
