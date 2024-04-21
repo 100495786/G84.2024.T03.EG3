@@ -79,11 +79,7 @@ class HotelManager:
         input_list = self.read_input_file(file_input)
 
         # comprobar valores del fichero
-        try:
-            my_localizer = input_list["Localizer"]
-            my_id_card = input_list["IdCard"]
-        except KeyError as e:
-            raise HotelManagementException("Error - Invalid Key in JSON") from e
+        my_id_card, my_localizer = self.read_input_data_from_file(input_list)
 
         #Validamos IdCard
         IdCard(my_id_card).value
@@ -165,6 +161,14 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return my_checkin.room_key
+
+    def read_input_data_from_file(self, input_list):
+        try:
+            my_localizer = input_list["Localizer"]
+            my_id_card = input_list["IdCard"]
+        except KeyError as e:
+            raise HotelManagementException("Error - Invalid Key in JSON") from e
+        return my_id_card, my_localizer
 
     def read_input_file(self, file_input):
         try:
