@@ -105,12 +105,7 @@ class HotelManager:
 
         #añado los datos de mi reserva a la lista , a lo que hubiera
         llegada.add_item_in_store(my_checkin)
-
-        try:
-            with open(file_store, "w", encoding="utf-8", newline="") as file:
-                json.dump(room_key_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise HotelManagementException("Wrong file  or file path") from ex
+        llegada.save_store()
 
         return my_checkin.room_key
 
