@@ -90,7 +90,7 @@ class HotelManager:
         llegada.load_json_store()
 
         # comprobar que no he hecho otro ckeckin antes
-        llegada.find_checkin(my_checkin)
+        llegada.find_checkin(my_checkin.room_key,"_HotelStay__room_key")
 
         #añado los datos de mi reserva a la lista , a lo que hubiera
         llegada.add_item_in_store(my_checkin)

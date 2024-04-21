@@ -11,6 +11,7 @@ class StoreArrival(JsonStore):
     def __init__(self):
         self._file_name= JSON_FILES_PATH + "store_check_in.json"
         self._data_list = []
+        self._error_message_find = "ckeckin  ya realizado"
 
     def create_reservation_from_arrival(self, my_id_card, my_localizer):
         # Validamos IdCard
@@ -61,10 +62,11 @@ class StoreArrival(JsonStore):
         except json.JSONDecodeError as ex:
             raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
         return input_list
-    def find_checkin(self, my_checkin):
+    def find_checkin(self, value, key):
+        self.load_json_store()
         for item in self._data_list:
-            if my_checkin.room_key == item["_HotelStay__room_key"]:
-                raise HotelManagementException("ckeckin  ya realizado")
+            if value == item[key]:
+                raise HotelManagementException(self._error_message_find)
     def load_reservation_store(self, file_store):
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
