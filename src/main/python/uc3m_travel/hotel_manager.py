@@ -77,10 +77,11 @@ class HotelManager:
 
     def guest_arrival(self, file_input:str)->str:
         """manages the arrival of a guest with a reservation"""
-        input_list = self.read_input_file(file_input)
+        llegada = StoreArrival()
+        input_list = llegada.read_input_file(file_input)
         # comprobar valores del fichero
-        my_id_card, my_localizer = self.read_input_data_from_file(input_list)
-        new_reservation = self.create_reservation_from_arrival(my_id_card, my_localizer)
+        my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
+        new_reservation = llegada.create_reservation_from_arrival(my_id_card, my_localizer)
 
         # compruebo si hoy es la fecha de checkin
         reservation_format = "%d/%m/%Y"
@@ -94,14 +95,12 @@ class HotelManager:
 
         #Ahora lo guardo en el almacen nuevo de checkin
         # escribo el fichero Json con todos los datos
-        file_store = JSON_FILES_PATH + "store_check_in.json"
 
         # leo los datos del fichero si existe , y si no existe creo una lista vacia
-        llegada = StoreArrival()
         room_key_list = llegada.load_json_store()
 
         # comprobar que no he hecho otro ckeckin antes
-        self.find_checkin(my_checkin, room_key_list)
+        llegada.find_checkin(my_checkin, room_key_list)
 
         #añado los datos de mi reserva a la lista , a lo que hubiera
         llegada.add_item_in_store(my_checkin)
