@@ -81,27 +81,13 @@ class HotelManager:
 
     def guest_arrival(self, file_input:str)->str:
         """manages the arrival of a guest with a reservation"""
-        llegada = StoreArrival()
-        input_list = llegada.read_input_file(file_input)
-        # comprobar valores del fichero
-        my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
-        new_reservation = llegada.create_reservation_from_arrival(my_id_card, my_localizer)
-
-        # compruebo si hoy es la fecha de checkin
-        reservation_format = "%d/%m/%Y"
-        date_obj = datetime.strptime(new_reservation.arrival, reservation_format)
-        if date_obj.date()!= datetime.date(datetime.utcnow()):
-            raise HotelManagementException("Error: today is not reservation date")
-
-        # genero la room key para ello llamo a Hotel Stay
-        my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
-                               localizer=my_localizer, roomtype=new_reservation.room_type)
+        llegada, my_checkin = self.create_guest_arrival_from_file(file_input)
 
         #Ahora lo guardo en el almacen nuevo de checkin
         # escribo el fichero Json con todos los datos
 
         # leo los datos del fichero si existe , y si no existe creo una lista vacia
-        room_key_list = llegada.load_json_store()
+        llegada.load_json_store()
 
         # comprobar que no he hecho otro ckeckin antes
         llegada.find_checkin(my_checkin)
@@ -111,6 +97,22 @@ class HotelManager:
         llegada.save_store()
 
         return my_checkin.room_key
+
+    def create_guest_arrival_from_file(self, file_input):
+        llegada = StoreArrival()
+        input_list = llegada.read_input_file(file_input)
+        # comprobar valores del fichero
+        my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
+        new_reservation = llegada.create_reservation_from_arrival(my_id_card, my_localizer)
+        # compruebo si hoy es la fecha de checkin
+        reservation_format = "%d/%m/%Y"
+        date_obj = datetime.strptime(new_reservation.arrival, reservation_format)
+        if date_obj.date() != datetime.date(datetime.utcnow()):
+            raise HotelManagementException("Error: today is not reservation date")
+        # genero la room key para ello llamo a Hotel Stay
+        my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
+                               localizer=my_localizer, roomtype=new_reservation.room_type)
+        return llegada, my_checkin
 
     def guest_checkout(self, room_key:str)->bool:
         """manages the checkout of a guest"""
