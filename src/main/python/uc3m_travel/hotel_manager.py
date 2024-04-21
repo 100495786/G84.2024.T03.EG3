@@ -108,15 +108,6 @@ class HotelManager:
         llegada.save_store()
 
         return my_checkin.room_key
-
-    def read_input_data_from_file(self, input_list):
-        try:
-            my_localizer = input_list["Localizer"]
-            my_id_card = input_list["IdCard"]
-        except KeyError as e:
-            raise HotelManagementException("Error - Invalid Key in JSON") from e
-        return my_id_card, my_localizer
-
     def read_input_file(self, file_input):
         try:
             with open(file_input, "r", encoding="utf-8", newline="") as file:

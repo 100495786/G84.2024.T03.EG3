@@ -44,3 +44,11 @@ class StoreArrival(JsonStore):
             if my_localizer == item["_HotelReservation__localizer"]:
                 return item
         raise HotelManagementException("Error: localizer not found")
+
+    def read_input_data_from_file(self, input_list):
+        try:
+            my_localizer = input_list["Localizer"]
+            my_id_card = input_list["IdCard"]
+        except KeyError as e:
+            raise HotelManagementException("Error - Invalid Key in JSON") from e
+        return my_id_card, my_localizer
