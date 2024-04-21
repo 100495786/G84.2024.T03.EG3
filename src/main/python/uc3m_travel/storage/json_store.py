@@ -25,11 +25,17 @@ class JsonStore:
             raise HotelManagementException("Wrong file  or file path") from ex
 
     def add_item_in_store(self,my_reservation):
+        #self.load_json_store(self._file_name)
         self._data_list.append(my_reservation.__dict__)
+        #self.save_store(self._file_name)
 
-    def find_item_in_store(self, my_reservation):
+    def find_item_in_store(self, value, key):
+        # for item in self._data_list:
+        #     if my_reservation.localizer == item["_HotelReservation__localizer"]:
+        #         raise HotelManagementException("Reservation already exists")
+        #     if my_reservation.id_card == item["_HotelReservation__id_card"]:
+        #         raise HotelManagementException("This ID card has another reservation")
+        self.load_json_store()
         for item in self._data_list:
-            if my_reservation.localizer == item["_HotelReservation__localizer"]:
-                raise HotelManagementException("Reservation already exists")
-            if my_reservation.id_card == item["_HotelReservation__id_card"]:
-                raise HotelManagementException("This ID card has another reservation")
+            if value == item[key]:
+                raise HotelManagementException(self._error_message_find)
