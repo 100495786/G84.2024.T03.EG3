@@ -11,6 +11,7 @@ from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_localizer import Localizer
 from uc3m_travel.attribute.attribute_roomkey import RoomKey
+from uc3m_travel.storage.store_arrival import StoreArrival
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
@@ -96,13 +97,8 @@ class HotelManager:
         file_store = JSON_FILES_PATH + "store_check_in.json"
 
         # leo los datos del fichero si existe , y si no existe creo una lista vacia
-        try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
-                room_key_list = json.load(file)
-        except FileNotFoundError as ex:
-            room_key_list = []
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        almacen = StoreArrival()
+        room_key_list = almacen.load_json_store()
 
         # comprobar que no he hecho otro ckeckin antes
         self.find_checkin(my_checkin, room_key_list)
@@ -149,21 +145,6 @@ class HotelManager:
         return new_reservation
 
     def find_reservation(self, my_localizer, store_list):
-        # found = False
-        # for item in store_list:
-        #     if my_localizer == item["_HotelReservation__localizer"]:
-        #         reservation_days = item["_HotelReservation__num_days"]
-        #         reservation_room_type = item["_HotelReservation__room_type"]
-        #         reservation_date_timestamp = item["_HotelReservation__reservation_date"]
-        #         reservation_credit_card = item["_HotelReservation__credit_card_number"]
-        #         reservation_date_arrival = item["_HotelReservation__arrival"]
-        #         reservation_name = item["_HotelReservation__name_surname"]
-        #         reservation_phone = item["_HotelReservation__phone_number"]
-        #         reservation_id_card = item["_HotelReservation__id_card"]
-        #         found = True
-        # if not found:
-        #     raise HotelManagementException("Error: localizer not found")
-        # return reservation_credit_card, reservation_date_arrival, reservation_date_timestamp, reservation_days, reservation_id_card, reservation_name, reservation_phone, reservation_room_type
         for item in store_list:
             if my_localizer == item["_HotelReservation__localizer"]:
                 return item
