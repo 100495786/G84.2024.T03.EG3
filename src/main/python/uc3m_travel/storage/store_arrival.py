@@ -39,3 +39,8 @@ class StoreArrival(JsonStore):
         if new_reservation.localizer != my_localizer:
             raise HotelManagementException("Error: reservation has been manipulated")
         return new_reservation
+    def find_reservation(self, my_localizer, store_list):
+        for item in store_list:
+            if my_localizer == item["_HotelReservation__localizer"]:
+                return item
+        raise HotelManagementException("Error: localizer not found")
