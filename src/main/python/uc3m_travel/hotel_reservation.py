@@ -62,3 +62,12 @@ class HotelReservation:
     def localizer(self):
         """Returns the md5 signature"""
         return self.__localizer
+    @property
+    def arrival(self):
+        return self.__arrival
+    @property
+    def num_days(self):
+        return self.__num_days
+    @property
+    def room_type(self):
+        return self.__room_type

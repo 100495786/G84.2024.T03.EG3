@@ -89,33 +89,34 @@ class HotelManager:
         # debe existir para hacer el checkin
         store_list = self.load_reservation_store(file_store)
         # compruebo si esa reserva esta en el almacen
-        reservation_credit_card, reservation_date_arrival, reservation_date_timestamp, reservation_days, reservation_id_card, reservation_name, reservation_phone, reservation_room_type = self.find_reservation(
-            my_localizer, store_list)
-        if my_id_card != reservation_id_card:
+        # reservation_credit_card, reservation_date_arrival, reservation_date_timestamp, reservation_days, reservation_id_card, reservation_name, reservation_phone, reservation_room_type = self.find_reservation(
+        #     my_localizer, store_list)
+        reservation= self.find_reservation(my_localizer, store_list)
+        if my_id_card != reservation["_HotelReservation__id_card"]:
             raise HotelManagementException("Error: Localizer is not correct for this IdCard")
         # regenrar clave y ver si coincide
-        reservation_date = datetime.fromtimestamp(reservation_date_timestamp)
+        reservation_date = datetime.fromtimestamp(reservation["_HotelReservation__reservation_date"])
 
         with freeze_time(reservation_date):
-            new_reservation = HotelReservation(credit_card_number=reservation_credit_card,
-                                               id_card=reservation_id_card,
-                                               num_days=reservation_days,
-                                               room_type=reservation_room_type,
-                                               arrival=reservation_date_arrival,
-                                               name_surname=reservation_name,
-                                               phone_number=reservation_phone)
+            new_reservation = HotelReservation(credit_card_number=reservation["_HotelReservation__credit_card_number"],
+                                               id_card=reservation["_HotelReservation__id_card"],
+                                               num_days=reservation["_HotelReservation__num_days"],
+                                               room_type=reservation["_HotelReservation__room_type"],
+                                               arrival=reservation["_HotelReservation__arrival"],
+                                               name_surname=reservation["_HotelReservation__name_surname"],
+                                               phone_number=reservation["_HotelReservation__phone_number"])
         if new_reservation.localizer != my_localizer:
             raise HotelManagementException("Error: reservation has been manipulated")
 
         # compruebo si hoy es la fecha de checkin
         reservation_format = "%d/%m/%Y"
-        date_obj = datetime.strptime(reservation_date_arrival, reservation_format)
+        date_obj = datetime.strptime(new_reservation.arrival, reservation_format)
         if date_obj.date()!= datetime.date(datetime.utcnow()):
             raise HotelManagementException("Error: today is not reservation date")
 
         # genero la room key para ello llamo a Hotel Stay
-        my_checkin = HotelStay(idcard=my_id_card, numdays=int(reservation_days),
-                               localizer=my_localizer, roomtype=reservation_room_type)
+        my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
+                               localizer=my_localizer, roomtype=new_reservation.room_type)
 
         #Ahora lo guardo en el almacen nuevo de checkin
         # escribo el fichero Json con todos los datos
@@ -145,21 +146,25 @@ class HotelManager:
         return my_checkin.room_key
 
     def find_reservation(self, my_localizer, store_list):
-        found = False
+        # found = False
+        # for item in store_list:
+        #     if my_localizer == item["_HotelReservation__localizer"]:
+        #         reservation_days = item["_HotelReservation__num_days"]
+        #         reservation_room_type = item["_HotelReservation__room_type"]
+        #         reservation_date_timestamp = item["_HotelReservation__reservation_date"]
+        #         reservation_credit_card = item["_HotelReservation__credit_card_number"]
+        #         reservation_date_arrival = item["_HotelReservation__arrival"]
+        #         reservation_name = item["_HotelReservation__name_surname"]
+        #         reservation_phone = item["_HotelReservation__phone_number"]
+        #         reservation_id_card = item["_HotelReservation__id_card"]
+        #         found = True
+        # if not found:
+        #     raise HotelManagementException("Error: localizer not found")
+        # return reservation_credit_card, reservation_date_arrival, reservation_date_timestamp, reservation_days, reservation_id_card, reservation_name, reservation_phone, reservation_room_type
         for item in store_list:
             if my_localizer == item["_HotelReservation__localizer"]:
-                reservation_days = item["_HotelReservation__num_days"]
-                reservation_room_type = item["_HotelReservation__room_type"]
-                reservation_date_timestamp = item["_HotelReservation__reservation_date"]
-                reservation_credit_card = item["_HotelReservation__credit_card_number"]
-                reservation_date_arrival = item["_HotelReservation__arrival"]
-                reservation_name = item["_HotelReservation__name_surname"]
-                reservation_phone = item["_HotelReservation__phone_number"]
-                reservation_id_card = item["_HotelReservation__id_card"]
-                found = True
-        if not found:
-            raise HotelManagementException("Error: localizer not found")
-        return reservation_credit_card, reservation_date_arrival, reservation_date_timestamp, reservation_days, reservation_id_card, reservation_name, reservation_phone, reservation_room_type
+                return item
+        raise HotelManagementException("Error: localizer not found")
 
     def read_input_data_from_file(self, input_list):
         try:
