@@ -97,14 +97,14 @@ class HotelManager:
         file_store = JSON_FILES_PATH + "store_check_in.json"
 
         # leo los datos del fichero si existe , y si no existe creo una lista vacia
-        almacen = StoreArrival()
-        room_key_list = almacen.load_json_store()
+        llegada = StoreArrival()
+        room_key_list = llegada.load_json_store()
 
         # comprobar que no he hecho otro ckeckin antes
         self.find_checkin(my_checkin, room_key_list)
 
         #añado los datos de mi reserva a la lista , a lo que hubiera
-        room_key_list.append(my_checkin.__dict__)
+        llegada.add_item_in_store(my_checkin)
 
         try:
             with open(file_store, "w", encoding="utf-8", newline="") as file:
