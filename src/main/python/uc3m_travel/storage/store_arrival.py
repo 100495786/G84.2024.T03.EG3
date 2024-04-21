@@ -62,11 +62,10 @@ class StoreArrival(JsonStore):
         except json.JSONDecodeError as ex:
             raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
         return input_list
-    def find_checkin(self, value, key):
+    def find_item_in_store(self, value, key):
         self.load_json_store()
-        for item in self._data_list:
-            if value == item[key]:
-                raise HotelManagementException(self._error_message_find)
+        super().find_item_in_store(value,key)
+        self._error_message_find
     def load_reservation_store(self, file_store):
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
