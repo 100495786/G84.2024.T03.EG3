@@ -108,15 +108,6 @@ class HotelManager:
         llegada.save_store()
 
         return my_checkin.room_key
-    def read_input_file(self, file_input):
-        try:
-            with open(file_input, "r", encoding="utf-8", newline="") as file:
-                input_list = json.load(file)
-        except FileNotFoundError as ex:
-            raise HotelManagementException("Error: file input not found") from ex
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
-        return input_list
 
     def find_checkin(self, my_checkin, room_key_list):
         for item in room_key_list:

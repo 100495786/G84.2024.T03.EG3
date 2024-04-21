@@ -52,3 +52,12 @@ class StoreArrival(JsonStore):
         except KeyError as e:
             raise HotelManagementException("Error - Invalid Key in JSON") from e
         return my_id_card, my_localizer
+    def read_input_file(self, file_input):
+        try:
+            with open(file_input, "r", encoding="utf-8", newline="") as file:
+                input_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: file input not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return input_list
