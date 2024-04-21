@@ -61,3 +61,7 @@ class StoreArrival(JsonStore):
         except json.JSONDecodeError as ex:
             raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
         return input_list
+    def find_checkin(self, my_checkin, room_key_list):
+        for item in room_key_list:
+            if my_checkin.room_key == item["_HotelStay__room_key"]:
+                raise HotelManagementException("ckeckin  ya realizado")

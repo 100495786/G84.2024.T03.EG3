@@ -109,11 +109,6 @@ class HotelManager:
 
         return my_checkin.room_key
 
-    def find_checkin(self, my_checkin, room_key_list):
-        for item in room_key_list:
-            if my_checkin.room_key == item["_HotelStay__room_key"]:
-                raise HotelManagementException("ckeckin  ya realizado")
-
     def load_reservation_store(self, file_store):
         try:
             with open(file_store, "r", encoding="utf-8", newline="") as file:
