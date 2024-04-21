@@ -1,5 +1,4 @@
 """Module for the hotel manager"""
-import re
 import json
 from datetime import datetime
 from uc3m_travel.hotel_management_exception import HotelManagementException
@@ -77,13 +76,7 @@ class HotelManager:
 
     def guest_arrival(self, file_input:str)->str:
         """manages the arrival of a guest with a reservation"""
-        try:
-            with open(file_input, "r", encoding="utf-8", newline="") as file:
-                input_list = json.load(file)
-        except FileNotFoundError as ex:
-            raise HotelManagementException ("Error: file input not found") from ex
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException ("JSON Decode Error - Wrong JSON Format") from ex
+        input_list = self.read_input_file(file_input)
 
         # comprobar valores del fichero
         try:
@@ -172,6 +165,16 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return my_checkin.room_key
+
+    def read_input_file(self, file_input):
+        try:
+            with open(file_input, "r", encoding="utf-8", newline="") as file:
+                input_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: file input not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return input_list
 
     def find_checkin(self, my_checkin, room_key_list):
         for item in room_key_list:
