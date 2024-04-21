@@ -81,22 +81,23 @@ class HotelManager:
 
     def guest_arrival(self, file_input:str)->str:
         """manages the arrival of a guest with a reservation"""
-        llegada, my_checkin = self.create_guest_arrival_from_file(file_input)
+        my_checkin = self.create_guest_arrival_from_file(file_input)
 
-        #Ahora lo guardo en el almacen nuevo de checkin
-        # escribo el fichero Json con todos los datos
-
-        # leo los datos del fichero si existe , y si no existe creo una lista vacia
-        llegada.load_json_store()
-
-        # comprobar que no he hecho otro ckeckin antes
-        llegada.find_checkin(my_checkin.room_key,"_HotelStay__room_key")
-
-        #añado los datos de mi reserva a la lista , a lo que hubiera
-        llegada.add_item_in_store(my_checkin)
-        llegada.save_store()
+        self.save_arrival(my_checkin)
 
         return my_checkin.room_key
+
+    def save_arrival(self, my_checkin):
+        # Ahora lo guardo en el almacen nuevo de checkin
+        # escribo el fichero Json con todos los datos
+        # leo los datos del fichero si existe , y si no existe creo una lista vacia
+        llegada = StoreArrival()
+        llegada.load_json_store()
+        # comprobar que no he hecho otro ckeckin antes
+        llegada.find_checkin(my_checkin.room_key, "_HotelStay__room_key")
+        # añado los datos de mi reserva a la lista , a lo que hubiera
+        llegada.add_item_in_store(my_checkin)
+        llegada.save_store()
 
     def create_guest_arrival_from_file(self, file_input):
         llegada = StoreArrival()
@@ -112,7 +113,7 @@ class HotelManager:
         # genero la room key para ello llamo a Hotel Stay
         my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
                                localizer=my_localizer, roomtype=new_reservation.room_type)
-        return llegada, my_checkin
+        return my_checkin
 
     def guest_checkout(self, room_key:str)->bool:
         """manages the checkout of a guest"""
