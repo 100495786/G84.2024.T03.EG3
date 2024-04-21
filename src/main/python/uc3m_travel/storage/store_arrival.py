@@ -65,3 +65,12 @@ class StoreArrival(JsonStore):
         for item in room_key_list:
             if my_checkin.room_key == item["_HotelStay__room_key"]:
                 raise HotelManagementException("ckeckin  ya realizado")
+    def load_reservation_store(self, file_store):
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                store_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: store reservation not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return store_list
