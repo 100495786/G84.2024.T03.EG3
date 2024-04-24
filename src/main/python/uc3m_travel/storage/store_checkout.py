@@ -1,6 +1,8 @@
 from uc3m_travel.storage.json_store import JsonStore
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from uc3m_travel.hotel_management_exception import HotelManagementException
+from datetime import datetime
+from freezegun import freeze_time
 import json
 class StoreCheckout(JsonStore):
     def __init__(self):
@@ -24,3 +26,8 @@ class StoreCheckout(JsonStore):
         if not found:
             raise HotelManagementException("Error: room key not found")
         return departure_date_timestamp
+
+    def is_today_departure(self, departure_date_timestamp):
+        today = datetime.utcnow().date()
+        if datetime.fromtimestamp(departure_date_timestamp).date() != today:
+            raise HotelManagementException("Error: today is not the departure day")

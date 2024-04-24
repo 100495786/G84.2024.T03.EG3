@@ -155,10 +155,6 @@ class HotelManager:
             if checkout["room_key"] == room_key:
                 raise HotelManagementException("Guest is already out")
 
-    def is_today_departure(self, departure_date_timestamp):
-        today = datetime.utcnow().date()
-        if datetime.fromtimestamp(departure_date_timestamp).date() != today:
-            raise HotelManagementException("Error: today is not the departure day")
 
 
 
