@@ -135,7 +135,7 @@ class HotelManager:
 
         self.find_checkout(room_key, room_key_list)
 
-        room_checkout={"room_key":  room_key, "checkout_time":datetime.timestamp(datetime.utcnow())}
+        room_checkout = self.create_checkout(room_key)
 
         room_key_list.append(room_checkout)
 
@@ -146,6 +146,10 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return True
+
+    def create_checkout(self, room_key):
+        room_checkout = {"room_key": room_key, "checkout_time": datetime.timestamp(datetime.utcnow())}
+        return room_checkout
 
     def find_checkout(self, room_key, room_key_list):
         for checkout in room_key_list:
