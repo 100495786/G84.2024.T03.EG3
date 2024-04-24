@@ -127,9 +127,7 @@ class HotelManager:
         # comprobar que esa room_key es la que me han dado
         departure_date_timestamp = self.find_checkin(room_key, room_key_list)
 
-        today = datetime.utcnow().date()
-        if datetime.fromtimestamp(departure_date_timestamp).date() != today:
-            raise HotelManagementException("Error: today is not the departure day")
+        self.is_today_departure(departure_date_timestamp)
 
         file_store_checkout = JSON_FILES_PATH + "store_check_out.json"
         try:
@@ -155,6 +153,11 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return True
+
+    def is_today_departure(self, departure_date_timestamp):
+        today = datetime.utcnow().date()
+        if datetime.fromtimestamp(departure_date_timestamp).date() != today:
+            raise HotelManagementException("Error: today is not the departure day")
 
     def find_checkin(self, room_key, room_key_list):
         found = False
