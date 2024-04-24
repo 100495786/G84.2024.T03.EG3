@@ -133,9 +133,7 @@ class HotelManager:
         checkout = StoreCheckout()
         room_key_list = checkout.load_json_store()
 
-        for checkout in room_key_list:
-            if checkout["room_key"] == room_key:
-                raise HotelManagementException("Guest is already out")
+        self.find_checkout(room_key, room_key_list)
 
         room_checkout={"room_key":  room_key, "checkout_time":datetime.timestamp(datetime.utcnow())}
 
@@ -148,6 +146,11 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return True
+
+    def find_checkout(self, room_key, room_key_list):
+        for checkout in room_key_list:
+            if checkout["room_key"] == room_key:
+                raise HotelManagementException("Guest is already out")
 
     def is_today_departure(self, departure_date_timestamp):
         today = datetime.utcnow().date()
