@@ -12,6 +12,7 @@ from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_localizer import Localizer
 from uc3m_travel.attribute.attribute_roomkey import RoomKey
 from uc3m_travel.storage.store_arrival import StoreArrival
+from uc3m_travel.storage.store_checkout import StoreCheckout
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
@@ -120,13 +121,8 @@ class HotelManager:
         RoomKey(room_key).value
         #check thawt the roomkey is stored in the checkins file
         file_store = JSON_FILES_PATH + "store_check_in.json"
-        try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
-                room_key_list = json.load(file)
-        except FileNotFoundError as ex:
-            raise HotelManagementException("Error: store checkin not found") from ex
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
+        room_key_list = self.load_checkin_store(file_store)
 
         # comprobar que esa room_key es la que me han dado
         found = False
@@ -165,3 +161,13 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return True
+
+    def load_checkin_store(self, file_store):
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                room_key_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: store checkin not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return room_key_list
