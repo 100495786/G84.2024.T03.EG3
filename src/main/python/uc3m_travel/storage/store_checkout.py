@@ -36,3 +36,7 @@ class StoreCheckout(JsonStore):
         for checkout in room_key_list:
             if checkout["room_key"] == room_key:
                 raise HotelManagementException("Guest is already out")
+
+    def create_checkout(self, room_key):
+        room_checkout = {"room_key": room_key, "checkout_time": datetime.timestamp(datetime.utcnow())}
+        return room_checkout
