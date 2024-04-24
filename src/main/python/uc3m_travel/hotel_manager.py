@@ -130,13 +130,8 @@ class HotelManager:
         self.is_today_departure(departure_date_timestamp)
 
         file_store_checkout = JSON_FILES_PATH + "store_check_out.json"
-        try:
-            with open(file_store_checkout, "r", encoding="utf-8", newline="") as file:
-                room_key_list = json.load(file)
-        except FileNotFoundError as ex:
-            room_key_list = []
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        checkout = StoreCheckout()
+        room_key_list = checkout.load_json_store()
 
         for checkout in room_key_list:
             if checkout["room_key"] == room_key:
