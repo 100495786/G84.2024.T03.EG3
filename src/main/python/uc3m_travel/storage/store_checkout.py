@@ -37,5 +37,5 @@ class StoreCheckout(JsonStore):
         room_checkout = {"room_key": room_key, "checkout_time": datetime.timestamp(datetime.utcnow())}
         return room_checkout
 
-    def add_checkout_store(self, room_checkout, room_key_list):
-        room_key_list.append(room_checkout)
+    def add_checkout_store(self, room_checkout):
+        self._data_list.append(room_checkout)
