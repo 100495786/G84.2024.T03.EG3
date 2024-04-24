@@ -31,3 +31,8 @@ class StoreCheckout(JsonStore):
         today = datetime.utcnow().date()
         if datetime.fromtimestamp(departure_date_timestamp).date() != today:
             raise HotelManagementException("Error: today is not the departure day")
+
+    def find_checkout(self, room_key, room_key_list):
+        for checkout in room_key_list:
+            if checkout["room_key"] == room_key:
+                raise HotelManagementException("Guest is already out")
