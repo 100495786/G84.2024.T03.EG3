@@ -139,11 +139,7 @@ class HotelManager:
 
         self.add_checkout_store(room_checkout, room_key_list)
 
-        try:
-            with open(file_store_checkout, "w", encoding="utf-8", newline="") as file:
-                json.dump(room_key_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise HotelManagementException("Wrong file  or file path") from ex
+        checkout.save_store()
 
         return True
 
