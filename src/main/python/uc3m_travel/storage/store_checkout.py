@@ -18,14 +18,10 @@ class StoreCheckout(JsonStore):
             raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
         return room_key_list
     def find_checkin(self, room_key, room_key_list):
-        found = False
         for item in room_key_list:
             if room_key == item["_HotelStay__room_key"]:
-                departure_date_timestamp = item["_HotelStay__departure"]
-                found = True
-        if not found:
-            raise HotelManagementException("Error: room key not found")
-        return departure_date_timestamp
+                return item["_HotelStay__departure"]
+        raise HotelManagementException("Error: room key not found")
 
     def is_today_departure(self, departure_date_timestamp):
         today = datetime.utcnow().date()
