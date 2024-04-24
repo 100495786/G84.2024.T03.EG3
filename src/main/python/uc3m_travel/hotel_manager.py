@@ -143,8 +143,7 @@ class HotelManager:
 
         return True
 
-    def add_checkout_store(self, room_checkout, room_key_list):
-        room_key_list.append(room_checkout)
+
 
 
 
