@@ -3,3 +3,4 @@ from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 class StoreCheckout(JsonStore):
     def __init__(self):
         self._file_name= JSON_FILES_PATH + "store_check_out.json"
+        self._data_list = []
