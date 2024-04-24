@@ -125,13 +125,7 @@ class HotelManager:
         room_key_list = self.load_checkin_store(file_store)
 
         # comprobar que esa room_key es la que me han dado
-        found = False
-        for item in room_key_list:
-            if room_key == item["_HotelStay__room_key"]:
-                departure_date_timestamp = item["_HotelStay__departure"]
-                found = True
-        if not found:
-            raise HotelManagementException ("Error: room key not found")
+        departure_date_timestamp = self.find_checkin(room_key, room_key_list)
 
         today = datetime.utcnow().date()
         if datetime.fromtimestamp(departure_date_timestamp).date() != today:
@@ -161,6 +155,16 @@ class HotelManager:
             raise HotelManagementException("Wrong file  or file path") from ex
 
         return True
+
+    def find_checkin(self, room_key, room_key_list):
+        found = False
+        for item in room_key_list:
+            if room_key == item["_HotelStay__room_key"]:
+                departure_date_timestamp = item["_HotelStay__departure"]
+                found = True
+        if not found:
+            raise HotelManagementException("Error: room key not found")
+        return departure_date_timestamp
 
     def load_checkin_store(self, file_store):
         try:
