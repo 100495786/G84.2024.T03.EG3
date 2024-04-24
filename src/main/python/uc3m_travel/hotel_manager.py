@@ -170,12 +170,4 @@ class HotelManager:
             raise HotelManagementException("Error: room key not found")
         return departure_date_timestamp
 
-    def load_checkin_store(self, file_store):
-        try:
-            with open(file_store, "r", encoding="utf-8", newline="") as file:
-                room_key_list = json.load(file)
-        except FileNotFoundError as ex:
-            raise HotelManagementException("Error: store checkin not found") from ex
-        except json.JSONDecodeError as ex:
-            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
-        return room_key_list
+
