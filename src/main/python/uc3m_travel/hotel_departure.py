@@ -12,3 +12,10 @@ class HotelDeparture:
         if datetime.fromtimestamp(departure_date_timestamp).date() != today:
             raise HotelManagementException("Error: today is not the departure day")
 
+    def safe_checkout(self, checkout, room_key):
+        room_key_list = checkout.load_json_store()
+        checkout.find_checkout(room_key, room_key_list)
+        room_checkout = checkout.create_checkout(room_key)
+        checkout.add_checkout_store(room_checkout)
+        checkout.save_store()
+

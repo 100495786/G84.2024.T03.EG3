@@ -99,16 +99,9 @@ class HotelManager:
             departure = HotelDeparture(room_key,departure_date_timestamp)
             departure.is_today_departure(departure_date_timestamp)
 
-            self.safe_checkout(checkout, room_key)
+            departure.safe_checkout(checkout, room_key)
 
             return True
-
-        def safe_checkout(self, checkout, room_key):
-            room_key_list = checkout.load_json_store()
-            checkout.find_checkout(room_key, room_key_list)
-            room_checkout = checkout.create_checkout(room_key)
-            checkout.add_checkout_store(room_checkout)
-            checkout.save_store()
 
     __instance = None
     def __new__(cls):
