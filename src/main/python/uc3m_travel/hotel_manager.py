@@ -3,11 +3,7 @@ import json
 from uc3m_travel.hotel_management_exception import HotelManagementException
 from uc3m_travel.hotel_reservation import HotelReservation
 from uc3m_travel.hotel_stay import HotelStay
-from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
-from uc3m_travel.attribute.attribute_roomkey import RoomKey
-from uc3m_travel.storage.store_arrival import StoreArrival
-from uc3m_travel.storage.store_checkout import StoreCheckout
 from uc3m_travel.hotel_departure import HotelDeparture
 
 class HotelManager:

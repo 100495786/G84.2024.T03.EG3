@@ -107,8 +107,6 @@ class HotelStay():
         # comprobar valores del fichero
         my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
         new_reservation = HotelReservation.create_reservation_from_arrival(my_id_card, my_localizer)
-        my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
-                               localizer=my_localizer, roomtype=new_reservation.room_type)
         # compruebo si hoy es la fecha de checkin
         reservation_format = "%d/%m/%Y"
         date_obj = datetime.strptime(new_reservation.arrival, reservation_format)

@@ -24,9 +24,7 @@ class JsonStore:
             raise HotelManagementException("Wrong file  or file path") from ex
 
     def add_item_in_store(self,my_reservation):
-        #self.load_json_store(self._file_name)
         self._data_list.append(my_reservation.__dict__)
-        #self.save_store(self._file_name)
 
     def find_item_in_store(self, value, key):
         self.load_json_store()
