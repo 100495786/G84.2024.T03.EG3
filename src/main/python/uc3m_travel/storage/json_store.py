@@ -5,8 +5,6 @@ class JsonStore:
     _data_list = []
     _error_message_find = ""
     _error_message_not_found = ""
-    def __init__(self):
-        pass
 
     def load_json_store(self):
         try:

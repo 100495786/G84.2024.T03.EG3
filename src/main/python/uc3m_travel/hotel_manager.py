@@ -72,21 +72,23 @@ class HotelManager:
 
         def guest_checkout(self, room_key:str)->bool:
             """manages the checkout of a guest"""
-            RoomKey(room_key).value
-            checkout = StoreCheckout()
-            #check thawt the roomkey is stored in the checkins file
-            file_store = JSON_FILES_PATH + "store_check_in.json"
+            checkout, departure = self.create_guest_check_out(room_key)
 
-            room_key_list = HotelStay.load_checkin_store(file_store)
-
-            # comprobar que esa room_key es la que me han dado
-            departure_date_timestamp = HotelStay.find_checkin(room_key, room_key_list)
-            departure = HotelDeparture(room_key,departure_date_timestamp)
-            departure.is_today_departure(departure_date_timestamp)
-
-            departure.safe_checkout(checkout, room_key)
+            departure.save_checkout(checkout, room_key)
 
             return True
+
+        def create_guest_check_out(self, room_key):
+            RoomKey(room_key).value
+            checkout = StoreCheckout()
+            # check thawt the roomkey is stored in the checkins file
+            file_store = JSON_FILES_PATH + "store_check_in.json"
+            room_key_list = HotelStay.load_checkin_store(file_store)
+            # comprobar que esa room_key es la que me han dado
+            departure_date_timestamp = HotelStay.find_checkin(room_key, room_key_list)
+            departure = HotelDeparture(room_key, departure_date_timestamp)
+            departure.is_today_departure(departure_date_timestamp)
+            return checkout, departure
 
     __instance = None
     def __new__(cls):
