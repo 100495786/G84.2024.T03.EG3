@@ -2,6 +2,8 @@
 from datetime import datetime
 import hashlib
 from uc3m_travel.storage.store_arrival import StoreArrival
+from uc3m_travel.hotel_management_exception import HotelManagementException
+
 
 class HotelStay():
     """Class for representing hotel stays"""
@@ -77,3 +79,14 @@ class HotelStay():
         # añado los datos de mi reserva a la lista , a lo que hubiera
         llegada.add_item_in_store(my_checkin)
         llegada.save_store()
+
+    def create_guest_arrival_from_file(self, new_reservation, my_id_card, my_localizer):
+        # compruebo si hoy es la fecha de checkin
+        reservation_format = "%d/%m/%Y"
+        date_obj = datetime.strptime(new_reservation.arrival, reservation_format)
+        if date_obj.date() != datetime.date(datetime.utcnow()):
+            raise HotelManagementException("Error: today is not reservation date")
+        # genero la room key para ello llamo a Hotel Stay
+        my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
+                               localizer=my_localizer, roomtype=new_reservation.room_type)
+        return my_checkin
