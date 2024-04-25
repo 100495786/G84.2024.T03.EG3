@@ -14,7 +14,7 @@ class HotelDeparture:
 
     def safe_checkout(self, checkout, room_key):
         room_key_list = checkout.load_json_store()
-        checkout.find_checkout(room_key, room_key_list)
+        checkout.find_checkout(room_key, "_HotelDeparture__room_key")
         room_checkout = checkout.create_checkout(room_key)
         checkout.add_checkout_store(room_checkout)
         checkout.save_store()

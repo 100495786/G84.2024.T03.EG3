@@ -8,11 +8,12 @@ class StoreCheckout(JsonStore):
     class __StoreCheckout(JsonStore):
         _file_name = JSON_FILES_PATH + "store_check_out.json"
         _data_list = []
+        _error_message_find = "Guest is already out"
 
-        def find_checkout(self, room_key, room_key_list):
-            for checkout in room_key_list:
-                if checkout["_HotelDeparture__room_key"] == room_key:
-                    raise HotelManagementException("Guest is already out")
+        def find_checkout(self, value, key):
+            self.load_json_store()
+            super().find_item_in_store(value,key)
+            self._error_message_find
 
         def create_checkout(self, room_key):
             room_checkout = {"_HotelDeparture__room_key": room_key, "_HotelDeparture__checkout_time": datetime.timestamp(datetime.utcnow())}
