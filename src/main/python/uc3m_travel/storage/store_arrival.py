@@ -9,7 +9,7 @@ from freezegun import freeze_time
 import json
 class StoreArrival(JsonStore):
     class __StoreArrival(JsonStore):
-        _file_name= JSON_FILES_PATH + "store_check_in.json"
+        _file_name = JSON_FILES_PATH + "store_check_in.json"
         _data_list = []
         _error_message_find = "ckeckin  ya realizado"
         def create_reservation_from_arrival(self, my_id_card, my_localizer):
@@ -74,6 +74,7 @@ class StoreArrival(JsonStore):
             except json.JSONDecodeError as ex:
                 raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
             return store_list
+
     __instance = None
     def __new__(cls):
         if not StoreArrival.__instance:

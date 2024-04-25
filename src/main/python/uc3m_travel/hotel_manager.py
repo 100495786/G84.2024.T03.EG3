@@ -16,7 +16,6 @@ from uc3m_travel.storage.store_checkout import StoreCheckout
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
-
     class __HotelManager():
         def __init__(self):
             pass
@@ -143,6 +142,7 @@ class HotelManager:
             checkout.save_store()
 
             return True
+
     __instance = None
     def __new__(cls):
         if not HotelManager.__instance:

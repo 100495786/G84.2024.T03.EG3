@@ -1,11 +1,12 @@
 from uc3m_travel.hotel_management_exception import HotelManagementException
 import json
 class JsonStore:
+    _file_name = ""
+    _data_list = []
+    _error_message_find = ""
+    _error_message_not_found = ""
     def __init__(self):
-        self._file_name=""
-        self._data_list=""
-        self._error_message_find = ""
-        self._error_message_not_found= ""
+        pass
 
     def load_json_store(self):
         try:
