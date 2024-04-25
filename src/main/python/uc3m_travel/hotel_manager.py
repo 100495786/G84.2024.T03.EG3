@@ -13,6 +13,7 @@ from uc3m_travel.attribute.attribute_localizer import Localizer
 from uc3m_travel.attribute.attribute_roomkey import RoomKey
 from uc3m_travel.storage.store_arrival import StoreArrival
 from uc3m_travel.storage.store_checkout import StoreCheckout
+from uc3m_travel.hotel_departure import HotelDeparture
 
 class HotelManager:
     """Class with all the methods for managing reservations and stays"""
@@ -128,8 +129,8 @@ class HotelManager:
 
             # comprobar que esa room_key es la que me han dado
             departure_date_timestamp = checkout.find_checkin(room_key, room_key_list)
-
-            checkout.is_today_departure(departure_date_timestamp)
+            departure = HotelDeparture(room_key,departure_date_timestamp)
+            departure.is_today_departure(departure_date_timestamp)
 
             room_key_list = checkout.load_json_store()
 

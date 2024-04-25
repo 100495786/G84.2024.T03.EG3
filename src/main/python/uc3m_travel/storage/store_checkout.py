@@ -23,11 +23,6 @@ class StoreCheckout(JsonStore):
                     return item["_HotelStay__departure"]
             raise HotelManagementException("Error: room key not found")
 
-        def is_today_departure(self, departure_date_timestamp):
-            today = datetime.utcnow().date()
-            if datetime.fromtimestamp(departure_date_timestamp).date() != today:
-                raise HotelManagementException("Error: today is not the departure day")
-
         def find_checkout(self, room_key, room_key_list):
             for checkout in room_key_list:
                 if checkout["room_key"] == room_key:
