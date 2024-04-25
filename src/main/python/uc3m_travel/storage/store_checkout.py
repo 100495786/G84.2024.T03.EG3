@@ -8,20 +8,6 @@ class StoreCheckout(JsonStore):
     class __StoreCheckout(JsonStore):
         _file_name = JSON_FILES_PATH + "store_check_out.json"
         _data_list = []
-        def load_checkin_store(self, file_store):
-            try:
-                with open(file_store, "r", encoding="utf-8", newline="") as file:
-                    room_key_list = json.load(file)
-            except FileNotFoundError as ex:
-                raise HotelManagementException("Error: store checkin not found") from ex
-            except json.JSONDecodeError as ex:
-                raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
-            return room_key_list
-        def find_checkin(self, room_key, room_key_list):
-            for item in room_key_list:
-                if room_key == item["_HotelStay__room_key"]:
-                    return item["_HotelStay__departure"]
-            raise HotelManagementException("Error: room key not found")
 
         def find_checkout(self, room_key, room_key_list):
             for checkout in room_key_list:

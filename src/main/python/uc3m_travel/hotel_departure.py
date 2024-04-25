@@ -18,4 +18,3 @@ class HotelDeparture:
         room_checkout = checkout.create_checkout(room_key)
         checkout.add_checkout_store(room_checkout)
         checkout.save_store()
-

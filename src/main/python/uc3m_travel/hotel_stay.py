@@ -82,8 +82,26 @@ class HotelStay():
         llegada.add_item_in_store(my_checkin)
         llegada.save_store()
 
+    @staticmethod
+    def load_checkin_store(file_store):
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                room_key_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: store checkin not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return room_key_list
+
+    @staticmethod
+    def find_checkin(room_key, room_key_list):
+        for item in room_key_list:
+            if room_key == item["_HotelStay__room_key"]:
+                return item["_HotelStay__departure"]
+        raise HotelManagementException("Error: room key not found")
+
     @classmethod
-    def create_guest_arrival_from_file(self, file_input,):
+    def create_guest_arrival_from_file(cls, file_input,):
         llegada = StoreArrival()
         input_list = llegada.read_input_file(file_input)
         # comprobar valores del fichero
@@ -100,3 +118,4 @@ class HotelStay():
         my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
                                localizer=my_localizer, roomtype=new_reservation.room_type)
         return my_checkin
+

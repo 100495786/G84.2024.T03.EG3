@@ -77,10 +77,10 @@ class HotelManager:
             #check thawt the roomkey is stored in the checkins file
             file_store = JSON_FILES_PATH + "store_check_in.json"
 
-            room_key_list = checkout.load_checkin_store(file_store)
+            room_key_list = HotelStay.load_checkin_store(file_store)
 
             # comprobar que esa room_key es la que me han dado
-            departure_date_timestamp = checkout.find_checkin(room_key, room_key_list)
+            departure_date_timestamp = HotelStay.find_checkin(room_key, room_key_list)
             departure = HotelDeparture(room_key,departure_date_timestamp)
             departure.is_today_departure(departure_date_timestamp)
 
