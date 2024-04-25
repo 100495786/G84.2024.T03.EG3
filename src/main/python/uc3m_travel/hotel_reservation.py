@@ -1,4 +1,3 @@
-"""Hotel reservation class"""
 import hashlib
 from datetime import datetime
 from uc3m_travel.attribute.attribute_name_surname import NameSurname
@@ -9,6 +8,11 @@ from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_room_type import RoomType
 from uc3m_travel.attribute.attribute_num_days import NumDays
 from uc3m_travel.storage.store_reservation import StoreReservation
+from uc3m_travel.attribute.attribute_localizer import Localizer
+from uc3m_travel.hotel_management_config import JSON_FILES_PATH
+from uc3m_travel.hotel_management_exception import HotelManagementException
+from freezegun import freeze_time
+import json
 
 class HotelReservation:
     """Class for representing hotel reservations"""
@@ -85,3 +89,50 @@ class HotelReservation:
         reserva.add_item_in_store(my_reservation)
         # escribo la lista en el fichero
         reserva.save_store()
+
+    @classmethod
+    def create_reservation_from_arrival(cls, my_id_card, my_localizer):
+        # Validamos IdCard
+        IdCard(my_id_card).value
+        # Validamos Localizer
+        Localizer(my_localizer).value
+        # buscar en almacen
+        file_store = JSON_FILES_PATH + "store_reservation.json"
+        # leo los datos del fichero , si no existe deber dar error porque el almacen de reservaa
+        # debe existir para hacer el checkin
+        store_list = cls.load_reservation_store(file_store)
+        # compruebo si esa reserva esta en el almacen
+        reservation = cls.find_reservation(my_localizer, store_list)
+        if my_id_card != reservation["_HotelReservation__id_card"]:
+            raise HotelManagementException("Error: Localizer is not correct for this IdCard")
+        # regenrar clave y ver si coincide
+        reservation_date = datetime.fromtimestamp(reservation["_HotelReservation__reservation_date"])
+        with freeze_time(reservation_date):
+            new_reservation = HotelReservation(credit_card_number=reservation["_HotelReservation__credit_card_number"],
+                                               id_card=reservation["_HotelReservation__id_card"],
+                                               num_days=reservation["_HotelReservation__num_days"],
+                                               room_type=reservation["_HotelReservation__room_type"],
+                                               arrival=reservation["_HotelReservation__arrival"],
+                                               name_surname=reservation["_HotelReservation__name_surname"],
+                                               phone_number=reservation["_HotelReservation__phone_number"])
+        if new_reservation.localizer != my_localizer:
+            raise HotelManagementException("Error: reservation has been manipulated")
+        return new_reservation
+
+    @staticmethod
+    def load_reservation_store(file_store):
+        try:
+            with open(file_store, "r", encoding="utf-8", newline="") as file:
+                store_list = json.load(file)
+        except FileNotFoundError as ex:
+            raise HotelManagementException("Error: store reservation not found") from ex
+        except json.JSONDecodeError as ex:
+            raise HotelManagementException("JSON Decode Error - Wrong JSON Format") from ex
+        return store_list
+
+    @staticmethod
+    def find_reservation(my_localizer, store_list):
+        for item in store_list:
+            if my_localizer == item["_HotelReservation__localizer"]:
+                return item
+        raise HotelManagementException("Error: localizer not found")

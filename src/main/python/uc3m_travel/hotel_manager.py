@@ -75,7 +75,7 @@ class HotelManager:
             input_list = llegada.read_input_file(file_input)
             # comprobar valores del fichero
             my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
-            new_reservation = llegada.create_reservation_from_arrival(my_id_card, my_localizer)
+            new_reservation = HotelReservation.create_reservation_from_arrival(my_id_card, my_localizer)
             my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
                                    localizer=my_localizer, roomtype=new_reservation.room_type)
             my_checkin.create_guest_arrival_from_file(new_reservation, my_id_card, my_localizer)
