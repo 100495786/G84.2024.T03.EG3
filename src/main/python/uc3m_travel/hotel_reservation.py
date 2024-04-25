@@ -8,6 +8,7 @@ from uc3m_travel.attribute.attribute_arrival import Arrival
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
 from uc3m_travel.attribute.attribute_room_type import RoomType
 from uc3m_travel.attribute.attribute_num_days import NumDays
+from uc3m_travel.storage.store_reservation import StoreReservation
 
 class HotelReservation:
     """Class for representing hotel reservations"""
@@ -71,3 +72,16 @@ class HotelReservation:
     @property
     def room_type(self):
         return self.__room_type
+
+    def save_reservation(self, my_reservation):
+        # escribo el fichero Json con todos los datos
+        reserva = StoreReservation()
+        # leo los datos del fichero si existe , y si no existe creo una lista vacia
+        reserva.load_json_store()
+        # compruebo que esta reserva no esta en la lista
+        reserva.find_item_in_store(my_reservation.localizer, "_HotelReservation__localizer", my_reservation.id_card,
+                                   "_HotelReservation__id_card")
+        # añado los datos de mi reserva a la lista , a lo que hubiera
+        reserva.add_item_in_store(my_reservation)
+        # escribo la lista en el fichero
+        reserva.save_store()
