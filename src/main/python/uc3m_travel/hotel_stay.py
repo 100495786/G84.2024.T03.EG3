@@ -1,6 +1,7 @@
 ''' Class HotelStay (GE2.2) '''
 from datetime import datetime
 import hashlib
+from uc3m_travel.storage.store_arrival import StoreArrival
 
 class HotelStay():
     """Class for representing hotel stays"""
@@ -64,3 +65,15 @@ class HotelStay():
     def departure(self, value):
         """returns the value of the departure date"""
         self.__departure = value
+
+    def save_arrival(self, my_checkin):
+        # Ahora lo guardo en el almacen nuevo de checkin
+        # escribo el fichero Json con todos los datos
+        # leo los datos del fichero si existe , y si no existe creo una lista vacia
+        llegada = StoreArrival()
+        llegada.load_json_store()
+        # comprobar que no he hecho otro ckeckin antes
+        llegada.find_item_in_store(my_checkin.room_key, "_HotelStay__room_key")
+        # añado los datos de mi reserva a la lista , a lo que hubiera
+        llegada.add_item_in_store(my_checkin)
+        llegada.save_store()
