@@ -63,7 +63,7 @@ class TestDeliverProduct(TestCase):
         found = False
         print(data_list)
         for checkout in data_list:
-            if (checkout["room_key"] ==
+            if (checkout["_HotelDeparture__room_key"] ==
                     "4f57880d4240350db9b276c84edaacc923a63906a408cc8da2b52c49213d3859"):
                 found = True
         self.assertTrue(found)
