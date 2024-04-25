@@ -1,15 +1,10 @@
 """Module for the hotel manager"""
 import json
-from datetime import datetime
 from uc3m_travel.hotel_management_exception import HotelManagementException
 from uc3m_travel.hotel_reservation import HotelReservation
 from uc3m_travel.hotel_stay import HotelStay
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
-from freezegun import freeze_time
-from uc3m_travel.storage.store_reservation import StoreReservation
-from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_credit_card import CreditCard
-from uc3m_travel.attribute.attribute_localizer import Localizer
 from uc3m_travel.attribute.attribute_roomkey import RoomKey
 from uc3m_travel.storage.store_arrival import StoreArrival
 from uc3m_travel.storage.store_checkout import StoreCheckout
@@ -71,19 +66,9 @@ class HotelManager:
 
         def guest_arrival(self, file_input: str) -> str:
             """manages the arrival of a guest with a reservation"""
-            llegada = StoreArrival()
-            input_list = llegada.read_input_file(file_input)
-            # comprobar valores del fichero
-            my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
-            new_reservation = HotelReservation.create_reservation_from_arrival(my_id_card, my_localizer)
-            my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
-                                   localizer=my_localizer, roomtype=new_reservation.room_type)
-            my_checkin.create_guest_arrival_from_file(new_reservation, my_id_card, my_localizer)
+            my_checkin = HotelStay.create_guest_arrival_from_file(file_input)
             my_checkin.save_arrival(my_checkin)
-
             return my_checkin.room_key
-
-
 
         def guest_checkout(self, room_key:str)->bool:
             """manages the checkout of a guest"""

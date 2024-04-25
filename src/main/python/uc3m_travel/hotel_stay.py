@@ -3,6 +3,8 @@ from datetime import datetime
 import hashlib
 from uc3m_travel.storage.store_arrival import StoreArrival
 from uc3m_travel.hotel_management_exception import HotelManagementException
+from uc3m_travel.hotel_reservation import HotelReservation
+import json
 
 
 class HotelStay():
@@ -80,7 +82,15 @@ class HotelStay():
         llegada.add_item_in_store(my_checkin)
         llegada.save_store()
 
-    def create_guest_arrival_from_file(self, new_reservation, my_id_card, my_localizer):
+    @classmethod
+    def create_guest_arrival_from_file(self, file_input,):
+        llegada = StoreArrival()
+        input_list = llegada.read_input_file(file_input)
+        # comprobar valores del fichero
+        my_id_card, my_localizer = llegada.read_input_data_from_file(input_list)
+        new_reservation = HotelReservation.create_reservation_from_arrival(my_id_card, my_localizer)
+        my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
+                               localizer=my_localizer, roomtype=new_reservation.room_type)
         # compruebo si hoy es la fecha de checkin
         reservation_format = "%d/%m/%Y"
         date_obj = datetime.strptime(new_reservation.arrival, reservation_format)

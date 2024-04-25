@@ -31,11 +31,6 @@ class JsonStore:
         #self.save_store(self._file_name)
 
     def find_item_in_store(self, value, key):
-        # for item in self._data_list:
-        #     if my_reservation.localizer == item["_HotelReservation__localizer"]:
-        #         raise HotelManagementException("Reservation already exists")
-        #     if my_reservation.id_card == item["_HotelReservation__id_card"]:
-        #         raise HotelManagementException("This ID card has another reservation")
         self.load_json_store()
         for item in self._data_list:
             if value == item[key]:
