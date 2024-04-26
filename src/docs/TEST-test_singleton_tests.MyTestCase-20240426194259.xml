@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test_singleton_tests.MyTestCase-20240426194259" tests="3" file="test_singleton_tests.py" time="0.003" timestamp="2024-04-26T19:43:00" failures="0" errors="0" skipped="0">
+	<testcase classname="test_singleton_tests.MyTestCase" name="test_singleton1" time="0.001" timestamp="2024-04-26T19:43:00"/>
+	<testcase classname="test_singleton_tests.MyTestCase" name="test_singleton2" time="0.001" timestamp="2024-04-26T19:43:00"/>
+	<testcase classname="test_singleton_tests.MyTestCase" name="test_singleton3" time="0.001" timestamp="2024-04-26T19:43:00"/>
+</testsuite>
