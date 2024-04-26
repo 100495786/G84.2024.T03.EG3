@@ -1,5 +1,6 @@
 import hashlib
 from datetime import datetime
+import json
 from uc3m_travel.attribute.attribute_name_surname import NameSurname
 from uc3m_travel.attribute.attribute_id_card import IdCard
 from uc3m_travel.attribute.attribute_phone_number import PhoneNumber
@@ -12,11 +13,9 @@ from uc3m_travel.attribute.attribute_localizer import Localizer
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 from uc3m_travel.hotel_management_exception import HotelManagementException
 from freezegun import freeze_time
-import json
 
 class HotelReservation:
     """Class for representing hotel reservations"""
-    #pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(self,
                  id_card:str,
                  credit_card_number:str,

@@ -21,4 +21,3 @@ class CreditCard(Attribute):
         if not checksum % 10 == 0:
             raise HotelManagementException("Invalid credit card number (not luhn)")
         return credit_card
-

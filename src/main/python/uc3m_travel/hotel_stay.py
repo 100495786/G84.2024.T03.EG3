@@ -1,11 +1,10 @@
 ''' Class HotelStay (GE2.2) '''
 from datetime import datetime
 import hashlib
+import json
 from uc3m_travel.storage.store_arrival import StoreArrival
 from uc3m_travel.hotel_management_exception import HotelManagementException
 from uc3m_travel.hotel_reservation import HotelReservation
-import json
-
 
 class HotelStay():
     """Class for representing hotel stays"""
@@ -116,4 +115,3 @@ class HotelStay():
         my_checkin = HotelStay(idcard=my_id_card, numdays=int(new_reservation.num_days),
                                localizer=my_localizer, roomtype=new_reservation.room_type)
         return my_checkin
-

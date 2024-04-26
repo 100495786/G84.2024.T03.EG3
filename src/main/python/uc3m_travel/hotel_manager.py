@@ -81,14 +81,3 @@ class HotelManager:
         if not HotelManager.__instance:
             HotelManager.__instance = HotelManager.__HotelManager()
         return HotelManager.__instance
-
-
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,6 @@
-from uc3m_travel.hotel_management_exception import HotelManagementException
 import json
+from uc3m_travel.hotel_management_exception import HotelManagementException
+
 class JsonStore:
     _file_name = ""
     _data_list = []

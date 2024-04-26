@@ -1,6 +1,7 @@
+from datetime import datetime
 from uc3m_travel.storage.json_store import JsonStore
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
-from datetime import datetime
+
 class StoreCheckout(JsonStore):
     class __StoreCheckout(JsonStore):
         _file_name = JSON_FILES_PATH + "store_check_out.json"

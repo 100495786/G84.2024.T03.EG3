@@ -1,12 +1,12 @@
-from uc3m_travel.hotel_management_exception import HotelManagementException
 from datetime import datetime
+from uc3m_travel.hotel_management_exception import HotelManagementException
 from uc3m_travel.hotel_stay import HotelStay
 from uc3m_travel.storage.store_checkout import StoreCheckout
 from uc3m_travel.attribute.attribute_roomkey import RoomKey
 from uc3m_travel.hotel_management_config import JSON_FILES_PATH
 class HotelDeparture:
     def __init__(self,room_key,departure_date_timestamp):
-        self.__room_key = room_key
+        self.__room_key = RoomKey(room_key).value
         self.__departure_date_timestamp = departure_date_timestamp
         self.__checkout_time = datetime.timestamp(datetime.utcnow())
         self.is_today_departure(self.__departure_date_timestamp)
@@ -24,7 +24,7 @@ class HotelDeparture:
 
     @classmethod
     def create_guest_check_out(cls, room_key):
-        RoomKey(room_key).value
+        room_key = RoomKey(room_key).value
         checkout = StoreCheckout()
         # check thawt the roomkey is stored in the checkins file
         file_store = JSON_FILES_PATH + "store_check_in.json"
